@@ -62,15 +62,32 @@
 //     else console.log('Result', files);
 // });
 
-const EventEmitter = require('events');
-const emitter = new EventEmitter();
+// const Logger = require('./logger');
+// const logger = new Logger();
 
-// Register a listener
-emitter.on('messageLogged', (arg) => {
-    console.log('Listener called', arg);
+// // Register a listener
+// logger.on('messageLogged', (arg) => {
+//     console.log('Listener called', arg);
+// });
+
+// logger.log('message');
+
+
+// HTTP 
+const http = require('http');
+
+const server = http.createServer((req, res) =>{
+    if(req.url === '/') {
+        res.write('Hello World');
+        res.end();
+    }
+
+    if(req.url === '/api/courses') {
+        res.write(JSON.stringify([1, 2, 3]));
+        res.end();
+    }
 });
 
-// Raise an event
-emitter.emit('messageLogged', { id: 1, url: 'http://'}); // Making a noise. produce - signalling that an event happens
+server.listen(3000);
 
-// Raise: logging (data: message)
+console.log('Listening on port 3000...');
