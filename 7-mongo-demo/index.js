@@ -5,28 +5,69 @@ mongoose.connect('mongodb://admin:password123@ds245901.mlab.com:45901/db_playgro
     .catch(err => console.error('Could not connect to MongoDB...', err));
 
 const courseSchema = new mongoose.Schema({
-    name: String,
-    author: String,
-    tags: [String],
-    date: {
-        type: Date,
-        default: Date.now
+    name: {
+        type: String,
+        required: true,
+        minlength: 5,
+        maxlength: 255,
     },
-    isPublish: Boolean
+    category: {
+        type: String,
+        required: true,
+        enum: ['web', 'mobile', 'network'],
+        lowercase: true,
+        // uppercase: true,
+        trim: true
+    },
+    author: String,
+    tags: {
+        type: Array,
+        validate: {
+            isAsync: true,
+            validator: function(value, callback) {
+                setTimeout(() => {
+                // Do some async work
+                    const result = value && value.length > 0;
+                    callback(result);
+                }, 2000);
+            },
+            message: 'A course should have atleast one tag'
+        }
+    },
+    date: Date,
+    isPublished: Boolean,
+    price: {
+        type: Number,
+        required: function () {
+            return this.isPublished;
+        },
+        min: 10,
+        max: 200,
+        get: value => Math.round(value),
+        set: value => Math.round(value)
+    }
 });
 
 const Course = mongoose.model('Course', courseSchema);
 
 async function createCourse() {
+    
     const course = new Course({
         name: 'Angular Course',
+        category: 'Web',
         author: 'Mac',
-        tags: ['angular', 'frontend'],
-        isPublish: true
+        tags: ['frontend'],
+        isPublished: true,
+        price: 15.8
     });
 
-    const result = await course.save();
-    console.log(result);
+    try {
+        const result = await course.save();
+        console.log(result);
+    } catch (err) {
+        for(field in err.errors)
+            console.log(err.errors[field].message);
+    }
 }
 
 async function getCourses() {
@@ -46,33 +87,41 @@ async function getCourses() {
     // Logical Operators
     // or
     // and
- 
+
     const courses = await Course
-        .find({ author: 'Mac', isPublish: true })
-        .skip((pageNumber - 1) * pageSize)
-        .limit(pageSize)
-        .sort({ name: 1 })
-        .select({ name: 1, tags: 1});
-        // Comparison Operators example
-        // .find({ price: { $gte: 10, $lte: 20 } })
-        // .find({ price: { $in: [10, 15, 20] } })
+        .find({
+            author: 'Mac',
+            isPublish: true
+        })
+        // .skip((pageNumber - 1) * pageSize)
+        // .limit(pageSize)
+        .sort({
+            name: 1
+        })
+        .select({
+            name: 1,
+            tags: 1
+        });
+    // Comparison Operators example
+    // .find({ price: { $gte: 10, $lte: 20 } })
+    // .find({ price: { $in: [10, 15, 20] } })
 
-        // Logical Operators example
-        // .find()
-        // .or([ { author: 'Mac' }, { isPublish: true } ])
-        // .and([ { author: 'Mac' }, { isPublish: true } ])
+    // Logical Operators example
+    // .find()
+    // .or([ { author: 'Mac' }, { isPublish: true } ])
+    // .and([ { author: 'Mac' }, { isPublish: true } ])
 
-        // Find using regex
-        // Starts with Mac
-        // .find({ author: /^Mac/ })
+    // Find using regex
+    // Starts with Mac
+    // .find({ author: /^Mac/ })
 
-        // Ends with Gutierrez 'i' is case insensitive
-        // .find({ author: /Gutierrez$/i })
+    // Ends with Gutierrez 'i' is case insensitive
+    // .find({ author: /Gutierrez$/i })
 
-        // Contains Mac
-        // .find({author: /.*Mac.*/ })
-        
-       
+    // Contains Mac
+    // .find({author: /.*Mac.*/ })
+
+
     console.log(courses);
 }
 
@@ -91,7 +140,9 @@ async function updateCourse(id) {
             author: 'Jason',
             isPublish: true
         }
-    }, { new: true });
+    }, {
+        new: true
+    });
     console.log(course);
 }
 
@@ -100,4 +151,5 @@ async function removeCourse(id) {
     const course = await Course.findByIdAndRemove(id);
     console.log(course);
 }
-removeCourse('5b566907aa08650d98ddac02');
+
+createCourse();
