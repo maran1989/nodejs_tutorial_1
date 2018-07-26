@@ -1,4 +1,4 @@
-const { Genre, validate } = require('../models/genres');
+const { Genre, validate } = require('../models/genre');
 const express = require('express');
 const router = express.Router();
 
@@ -43,7 +43,7 @@ router.delete('/:id', async (req, res) => {
 
     if (!genre) return res.status(404).send('customer');
 
-    res.send(genre);validate
+    res.send(genre);
 });
 
 module.exports = router;
