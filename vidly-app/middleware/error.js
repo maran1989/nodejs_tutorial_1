@@ -2,7 +2,7 @@ const winston = require('winston');
 
 module.exports = function(err, req, res, next) {
     winston.error('error', err.message, err);
-    // different tyoe if logs
+    // different type if logs
 
     // error
     // warn
