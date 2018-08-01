@@ -1,5 +1,5 @@
 const winston = require('winston');
-require('winston-mongodb');
+// require('winston-mongodb');
 require('express-async-errors');
 
 module.exports = function () {
@@ -22,10 +22,10 @@ module.exports = function () {
     winston.add(winston.transports.File, {
         filename: 'logfile.log'
     });
-    winston.add(winston.transports.MongoDB, {
-        db: 'mongodb://admin:password123@ds147411.mlab.com:47411/db_vidly',
-        level: 'error'
-    });
+    // winston.add(winston.transports.MongoDB, {
+    //     db: 'mongodb://admin:password123@ds147411.mlab.com:47411/db_vidly',
+    //     level: 'error'
+    // });
 
     // const p = Promise.reject(new Error('Something failed miserably'));
     // p.then(() => console.log('Done'));

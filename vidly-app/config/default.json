@@ -1,3 +1,4 @@
 {
-    "jwtPrivateKey": ""
+    "jwtPrivateKey": "",
+    "db": "mongodb://admin:password123@ds147411.mlab.com:47411/db_vidly"
 }
