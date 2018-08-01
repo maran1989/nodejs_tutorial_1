@@ -1,4 +1,4 @@
 {
     "jwtPrivateKey": "1234",
-    "db": "mongodb://admin:password123@ds147411.mlab.com:47411/db_vidly_test"
+    "db": "mongodb://admin:password123@ds159661.mlab.com:59661/db_vidly_test"
 }
