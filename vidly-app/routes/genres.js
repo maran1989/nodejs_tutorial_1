@@ -1,20 +1,19 @@
+const validateObjectId = require('../middleware/validateObjectId');
 const admin = require('../middleware/admin');
 const auth = require('../middleware/auth');
 const { Genre, validate } = require('../models/genre');
 const express = require('express');
 const router = express.Router();
 
-
-
 router.get('/', async (req, res) => {
     const genres = await Genre.find().sort('name');
     res.send(genres);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => {
     const genre = await Genre.findById(req.params.id);
 
-    if (!genre) return res.status(404).send('customer');
+    if (!genre) return res.status(404).send('The genre with the given Id was not found');
 
     res.send(genre);
 });
@@ -29,7 +28,7 @@ router.post('/', auth, async (req, res) => {
     res.send(genre);
 });
 
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', [auth, validateObjectId], async (req, res) => {
     const { error } = validate(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -37,15 +36,15 @@ router.put('/:id', auth, async (req, res) => {
         new: true
     });
 
-    if (!genre) return res.status(404).send('customer');
+    if (!genre) return res.status(404).send('The genre with the given Id was not found');
     
     res.send(genre);
 });
 
-router.delete('/:id', [auth, admin], async (req, res) => {
+router.delete('/:id', [auth, admin, validateObjectId], async (req, res) => {
     const genre = await Genre.findByIdAndRemove(req.params.id);
 
-    if (!genre) return res.status(404).send('customer');
+    if (!genre) return res.status(404).send('The genre with the given Id was not found');
 
     res.send(genre);
 });

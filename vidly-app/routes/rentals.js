@@ -1,3 +1,7 @@
+const validateObjectId = require('../middleware/validateObjectId');
+const admin = require('../middleware/admin');
+const auth = require('../middleware/auth');
+
 const { Rental, validate } = require('../models/rental');
 const { Movie } = require('../models/movie');
 const { Customer } = require('../models/customer');
@@ -14,10 +18,10 @@ router.get('/', async (req, res) => {
     res.send(rentals);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => {
     const movie = await Rental.findById(req.params.id);
 
-    if (!movie) return res.status(404).send('No movie found by the given ID..');
+    if (!movie) return res.status(404).send('No rental found by the given ID..');
 
     res.send(movie);
 });
@@ -65,12 +69,12 @@ router.post('/', async (req, res) => {
     
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', validateObjectId, async (req, res) => {
     const { error } = validate(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
 
     const genre = await Movie.findById(req.body.genreId);
-    if(!genre) return res.status(400).send('Invalid genre.');
+    if(!genre) return res.status(400).send('No genre found by the given ID.');
 
     const movie = await Rental.findByIdAndUpdate(req.params.id, { 
         title: req.body.title,
@@ -89,10 +93,10 @@ router.put('/:id', async (req, res) => {
     res.send(movie);
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [auth, admin, validateObjectId], async (req, res) => {
     const movie = await Rental.findByIdAndRemove(req.params.id);
 
-    if (!movie) return res.status(404).send('No movie found by the given ID..');
+    if (!movie) return res.status(404).send('No rental found by the given ID..');
 
     res.send(movie);
 });
