@@ -1,0 +1,8 @@
+{"level":"info","message":"Listening to port 3000...","timestamp":"2018-08-02T22:26:50.352Z"}
+{"level":"info","message":"Connected to mongodb://admin:password123@ds159661.mlab.com:59661/db_vidly_test...","timestamp":"2018-08-02T22:26:51.973Z"}
+{"level":"info","message":"Listening to port 3000...","timestamp":"2018-08-02T22:27:12.982Z"}
+{"level":"info","message":"Connected to mongodb://admin:password123@ds159661.mlab.com:59661/db_vidly_test...","timestamp":"2018-08-02T22:27:14.368Z"}
+{"level":"info","message":"Listening to port 3000...","timestamp":"2018-08-02T22:27:33.441Z"}
+{"level":"info","message":"Connected to mongodb://admin:password123@ds159661.mlab.com:59661/db_vidly_test...","timestamp":"2018-08-02T22:27:35.274Z"}
+{"level":"info","message":"Listening to port 3000...","timestamp":"2018-08-02T22:27:43.573Z"}
+{"level":"info","message":"Connected to mongodb://admin:password123@ds159661.mlab.com:59661/db_vidly_test...","timestamp":"2018-08-02T22:27:45.499Z"}

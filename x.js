@@ -39,7 +39,7 @@ let course = {
 // Login User: POST /api/logins
 
 
-// Section 14: TDD
+// Section 14: Test-driven Development
 
 // POST /api/returns {customerId, movieId}
 
@@ -50,6 +50,6 @@ let course = {
 // Return 400 if rental already processed
 // Return 200 if valid request
 // Set the return date
-// Calculate the rental fee
+// Calculate the rental fee (numberOfDays * movie.dailyRentalRate)
 // Increase the stock
 // Return the rental

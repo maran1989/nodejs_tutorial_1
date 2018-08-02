@@ -1,8 +1,8 @@
 const validateObjectId = require('../middleware/validateObjectId');
 const admin = require('../middleware/admin');
 const auth = require('../middleware/auth');
-
-const { Rental, validate } = require('../models/rental');
+const validate = require('../middleware/validate');
+const { Rental, validateRental } = require('../models/rental');
 const { Movie } = require('../models/movie');
 const { Customer } = require('../models/customer');
 
@@ -26,10 +26,7 @@ router.get('/:id', validateObjectId, async (req, res) => {
     res.send(movie);
 });
 
-router.post('/', async (req, res) => {
-    const { error } = validate(req.body); 
-    if (error) return res.status(400).send(error.details[0].message);
-    
+router.post('/', validate(validateRental), async (req, res) => {    
     // if(!mongoose.Types.ObjectId.isValid(req.body.customerId))
     //     return res.status(400).send('Invalid customer.')
 
@@ -69,10 +66,7 @@ router.post('/', async (req, res) => {
     
 });
 
-router.put('/:id', validateObjectId, async (req, res) => {
-    const { error } = validate(req.body); 
-    if (error) return res.status(400).send(error.details[0].message);
-
+router.put('/:id', [validateObjectId, validate(validateRental)], async (req, res) => {
     const genre = await Movie.findById(req.body.genreId);
     if(!genre) return res.status(400).send('No genre found by the given ID.');
 
